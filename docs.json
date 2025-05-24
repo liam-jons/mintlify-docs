@@ -8,94 +8,77 @@
     "dark": "#1e40af"
   },
   "favicon": "/favicon.svg",
-  "navigation": {
-    "tabs": [
-      {
-        "tab": "Overview",
-        "groups": [
-          {
-            "group": "Getting Started",
-            "pages": [
-              "index",
-              "quickstart",
-              "architecture"
-            ]
-          },
-          {
-            "group": "Setup",
-            "pages": [
-              "setup/database",
-              "setup/environment",
-              "setup/authentication"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Proposals",
-        "groups": [
-          {
-            "group": "Core Features",
-            "pages": [
-              "proposals/overview",
-              "proposals/database-schema",
-              "proposals/api-routes",
-              "proposals/real-time"
-            ]
-          },
-          {
-            "group": "Implementation",
-            "pages": [
-              "proposals/magic-links",
-              "proposals/email-integration",
-              "proposals/viewer-interface"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "API Reference",
-        "groups": [
-          {
-            "group": "Proposals API",
-            "pages": [
-              "api-reference/proposals/list",
-              "api-reference/proposals/create",
-              "api-reference/proposals/get",
-              "api-reference/proposals/update",
-              "api-reference/proposals/delete",
-              "api-reference/proposals/send"
-            ]
-          }
-        ]
-      }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "GitHub",
-          "href": "https://github.com/your-org/tw-group",
-          "icon": "github"
-        },
-        {
-          "anchor": "Support",
-          "href": "mailto:support@aisolutionhub.co.uk",
-          "icon": "envelope"
-        }
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": [
+        "index",
+        "quickstart",
+        "architecture"
+      ]
+    },
+    {
+      "group": "Setup",
+      "pages": [
+        "setup/database",
+        "setup/environment",
+        "setup/authentication"
+      ]
+    },
+    {
+      "group": "Core Features",
+      "pages": [
+        "proposals/overview",
+        "proposals/database-schema",
+        "proposals/api-routes",
+        "proposals/real-time"
+      ]
+    },
+    {
+      "group": "Implementation",
+      "pages": [
+        "proposals/magic-links",
+        "proposals/email-integration",
+        "proposals/viewer-interface"
+      ]
+    },
+    {
+      "group": "API Reference",
+      "pages": [
+        "api-reference/proposals/list",
+        "api-reference/proposals/create",
+        "api-reference/proposals/get",
+        "api-reference/proposals/update",
+        "api-reference/proposals/delete",
+        "api-reference/proposals/send"
       ]
     }
-  },
+  ],
+  "anchors": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/your-org/tw-group",
+      "icon": "github"
+    },
+    {
+      "name": "Support",
+      "url": "mailto:support@aisolutionhub.co.uk",
+      "icon": "envelope"
+    }
+  ],
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
-  "navbar": {
-    "links": [
-      {
-        "label": "Dashboard",
-        "href": "https://aisolutionhub.co.uk/admin"
-      }
-    ]
+  "topbarLinks": [
+    {
+      "name": "Admin Portal",
+      "url": "https://aisolutionhub.co.uk/admin"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Mintlify Dashboard",
+    "url": "https://dashboard.mintlify.com/aisolutionhub/aisolutionhub"
   },
   "footer": {
     "socials": {
