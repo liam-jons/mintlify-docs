@@ -1,35 +1,54 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "theme": "quill",
+  "name": "AI Solution Hub - Proposal System",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#2563eb",
+    "light": "#3b82f6",
+    "dark": "#1e40af"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Overview",
         "groups": [
           {
-            "group": "Get Started",
+            "group": "Getting Started",
             "pages": [
               "index",
               "quickstart",
-              "development"
+              "architecture"
             ]
           },
           {
-            "group": "Essentials",
+            "group": "Setup",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/settings",
-              "essentials/navigation",
-              "essentials/reusable-snippets"
+              "setup/database",
+              "setup/environment",
+              "setup/authentication"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Proposals",
+        "groups": [
+          {
+            "group": "Core Features",
+            "pages": [
+              "proposals/overview",
+              "proposals/database-schema",
+              "proposals/api-routes",
+              "proposals/real-time"
+            ]
+          },
+          {
+            "group": "Implementation",
+            "pages": [
+              "proposals/magic-links",
+              "proposals/email-integration",
+              "proposals/viewer-interface"
             ]
           }
         ]
@@ -38,18 +57,14 @@
         "tab": "API Reference",
         "groups": [
           {
-            "group": "API Documentation",
+            "group": "Proposals API",
             "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint Examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "api-reference/proposals/list",
+              "api-reference/proposals/create",
+              "api-reference/proposals/get",
+              "api-reference/proposals/update",
+              "api-reference/proposals/delete",
+              "api-reference/proposals/send"
             ]
           }
         ]
@@ -58,19 +73,14 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "GitHub",
+          "href": "https://github.com/your-org/tw-group",
+          "icon": "github"
         },
         {
-          "anchor": "Community",
-          "href": "https://mintlify.com/community",
-          "icon": "slack"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Support",
+          "href": "mailto:support@aisolutionhub.co.uk",
+          "icon": "envelope"
         }
       ]
     }
@@ -82,21 +92,14 @@
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "Dashboard",
+        "href": "https://aisolutionhub.co.uk/admin"
       }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
+    ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "github": "https://github.com/your-org/tw-group"
     }
   }
 }

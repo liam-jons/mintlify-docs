@@ -1,0 +1,165 @@
+---
+title: 'Database Setup'
+description: 'Configure Supabase and run the proposal system migrations'
+---
+
+## Prerequisites
+
+Before setting up the database, ensure you have:
+
+1. A Supabase account and project created
+2. Access to the Supabase dashboard
+3. The migration files from the tw-group repository
+
+## Step 1: Run Database Migrations
+
+### Migration 001 - Core Schema
+
+1. Navigate to your Supabase dashboard
+2. Go to **SQL Editor**
+3. Create a new query
+4. Copy the contents of `/supabase/migrations/001_proposal_system_schema.sql`
+5. Execute the query
+
+This migration creates:
+- All proposal-related tables
+- Row Level Security policies
+- Helper functions
+- Performance indexes
+- Real-time publication settings
+
+<Note>
+If you encounter the error `syntax error at or near "("` on line 77, the fix has already been applied in the migration file.
+</Note>
+
+### Migration 002 - Auth Configuration
+
+1. In the SQL Editor, create another query
+2. Copy the contents of `/supabase/migrations/002_auth_config_updates.sql`
+3. Execute the query
+
+This migration adds:
+- Profiles table for user management
+- Admin flag for access control
+- Automatic profile creation trigger
+
+## Step 2: Configure Authentication
+
+### Email Provider Settings
+
+1. Go to **Authentication** → **Providers** → **Email**
+2. Configure the following:
+   - **Enable Email Provider**: ON
+   - **Confirm Email**: OFF (for development)
+   - **Enable Signups**: OFF (controlled access)
+   - **OTP Expiry**: 900 seconds (15 minutes)
+
+### Custom SMTP (Production)
+
+1. In Email settings, click **Enable Custom SMTP**
+2. Configure SendGrid:
+   - **Host**: `smtp.sendgrid.net`
+   - **Port**: `587`
+   - **Username**: `apikey`
+   - **Password**: Your SendGrid API key
+   - **Sender Email**: `noreply@aisolutionhub.co.uk`
+   - **Sender Name**: `AI Solution Hub`
+
+### Redirect URLs
+
+1. Go to **Authentication** → **URL Configuration**
+2. Add to **Redirect URLs**:
+   ```
+   http://localhost:3000/proposals/*
+   https://www.aisolutionhub.co.uk/proposals/*
+   ```
+
+## Step 3: Create Storage Buckets
+
+1. Navigate to **Storage**
+2. Create the following buckets:
+
+### Proposals Bucket
+- **Name**: `proposals`
+- **Public**: No
+- **File Size Limit**: 10MB
+- **Allowed MIME Types**: `application/pdf,image/*`
+
+### Proposal Assets Bucket
+- **Name**: `proposal-assets`
+- **Public**: No
+- **File Size Limit**: 5MB
+- **Allowed MIME Types**: `image/*`
+
+## Step 4: Create Admin User
+
+1. Go to **Authentication** → **Users**
+2. Click **Add User**
+3. Enter your admin email and password
+4. After creation, run this SQL to make them admin:
+
+```sql
+UPDATE profiles 
+SET is_admin = true 
+WHERE email = 'your-email@example.com';
+```
+
+## Step 5: Verify Installation
+
+Run this verification query in SQL Editor:
+
+```sql
+-- Check all tables exist
+SELECT table_name 
+FROM information_schema.tables 
+WHERE table_schema = 'public' 
+AND table_name LIKE 'proposal%'
+ORDER BY table_name;
+
+-- Verify RLS is enabled
+SELECT tablename, rowsecurity 
+FROM pg_tables 
+WHERE schemaname = 'public' 
+AND tablename LIKE 'proposal%';
+
+-- Check real-time is configured
+SELECT * FROM publication_tables 
+WHERE publication_name = 'supabase_realtime';
+```
+
+Expected results:
+- 8 proposal tables
+- All tables show `rowsecurity = true`
+- `proposals` and `proposal_comments` in real-time publication
+
+## Step 6: Seed Initial Data
+
+The migration includes two template records. To add more templates:
+
+```sql
+INSERT INTO proposal_templates (name, description, sections, default_pricing)
+VALUES (
+  'Your Template Name',
+  'Template description',
+  '{"tools": [], "flows": [], "prototypes": []}'::jsonb,
+  '{"base": 5000, "per_tool": 1000}'::jsonb
+);
+```
+
+## Troubleshooting
+
+### RLS Policy Issues
+If you can't access data, check:
+1. User is authenticated
+2. User has proper access in `proposal_access` table
+3. RLS policies are correctly configured
+
+### Real-time Not Working
+1. Ensure tables are added to publication
+2. Check WebSocket connection in browser console
+3. Verify anon key has proper permissions
+
+### Email Not Sending
+1. Verify SendGrid API key is correct
+2. Check sender domain is verified in SendGrid
+3. Review Supabase logs for SMTP errors
