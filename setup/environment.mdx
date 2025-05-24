@@ -1,0 +1,118 @@
+---
+title: 'Environment Variables'
+description: 'Configure environment variables for the proposal system'
+---
+
+## Overview
+
+The proposal system requires several environment variables to be configured for proper operation. These should be stored in a `.env.local` file in the project root.
+
+## Required Variables
+
+### Supabase Configuration
+
+```env
+# Supabase Project URL
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+
+# Supabase Anonymous Key (public)
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+
+# Supabase Service Role Key (server-side only)
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+```
+
+<Warning>
+Never expose `SUPABASE_SERVICE_ROLE_KEY` to the client. This key bypasses Row Level Security and should only be used in server-side code.
+</Warning>
+
+### SendGrid Configuration
+
+```env
+# SendGrid API Key
+SENDGRID_API_KEY=SG.your-sendgrid-api-key
+
+# Sender Email (must be verified in SendGrid)
+SENDGRID_FROM_EMAIL=proposals@yourdomain.com
+
+# Sender Name
+SENDGRID_FROM_NAME=Your Company Name
+
+# Optional: Dynamic Template ID
+SENDGRID_PROPOSAL_TEMPLATE_ID=d-your-template-id
+```
+
+### Application Configuration
+
+```env
+# Application URL
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+
+# Node Environment
+NODE_ENV=development
+```
+
+## Environment Files
+
+### Development (.env.local)
+
+```env
+# Development configuration
+NEXT_PUBLIC_SUPABASE_URL=https://your-dev-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-dev-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-dev-service-key
+SENDGRID_API_KEY=your-dev-sendgrid-key
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+### Production (.env.production)
+
+```env
+# Production configuration
+NEXT_PUBLIC_SUPABASE_URL=https://your-prod-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-prod-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-prod-service-key
+SENDGRID_API_KEY=your-prod-sendgrid-key
+NEXT_PUBLIC_APP_URL=https://aisolutionhub.co.uk
+```
+
+## Vercel Deployment
+
+When deploying to Vercel, add these environment variables in the Vercel dashboard:
+
+1. Go to your project settings
+2. Navigate to "Environment Variables"
+3. Add each variable for the appropriate environments
+4. Ensure sensitive keys are only added to server-side environments
+
+## Security Best Practices
+
+1. **Never commit `.env` files** to version control
+2. **Use different keys** for development and production
+3. **Rotate keys regularly** especially after team changes
+4. **Limit key permissions** in third-party services
+5. **Use Vercel's environment variables** for production
+
+## Validating Configuration
+
+Create a simple validation script:
+
+```javascript
+// scripts/validate-env.js
+const required = [
+  'NEXT_PUBLIC_SUPABASE_URL',
+  'NEXT_PUBLIC_SUPABASE_ANON_KEY',
+  'SUPABASE_SERVICE_ROLE_KEY',
+  'SENDGRID_API_KEY',
+  'NEXT_PUBLIC_APP_URL'
+];
+
+const missing = required.filter(key => !process.env[key]);
+
+if (missing.length > 0) {
+  console.error('Missing environment variables:', missing);
+  process.exit(1);
+}
+
+console.log('✅ All required environment variables are set');
+```

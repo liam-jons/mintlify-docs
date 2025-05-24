@@ -1,0 +1,113 @@
+---
+title: 'List Proposals'
+api: 'GET /api/proposals'
+description: 'Retrieve a paginated list of proposals'
+---
+
+## Authentication
+
+<ParamField header="Authorization" type="string" required>
+  Bearer token for authentication
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="status" type="string">
+  Filter by proposal status. Options: `draft`, `sent`, `viewed`, `accepted`, `paid`, `expired`
+</ParamField>
+
+<ParamField query="limit" type="number" default="20">
+  Number of proposals to return (max: 100)
+</ParamField>
+
+<ParamField query="offset" type="number" default="0">
+  Number of proposals to skip for pagination
+</ParamField>
+
+## Response
+
+<ResponseField name="proposals" type="array">
+  Array of proposal objects
+  
+  <Expandable title="Proposal Object">
+    <ResponseField name="id" type="string">
+      Unique proposal identifier
+    </ResponseField>
+    
+    <ResponseField name="client_company" type="string">
+      Client company name
+    </ResponseField>
+    
+    <ResponseField name="client_email" type="string">
+      Client email address
+    </ResponseField>
+    
+    <ResponseField name="status" type="string">
+      Current proposal status
+    </ResponseField>
+    
+    <ResponseField name="created_at" type="string">
+      ISO 8601 creation timestamp
+    </ResponseField>
+    
+    <ResponseField name="template" type="object">
+      Associated template information
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="pagination" type="object">
+  Pagination metadata
+  
+  <Expandable title="Pagination">
+    <ResponseField name="limit" type="number">
+      Items per page
+    </ResponseField>
+    
+    <ResponseField name="offset" type="number">
+      Current offset
+    </ResponseField>
+    
+    <ResponseField name="total" type="number">
+      Total number of proposals
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+```bash
+curl -X GET https://api.example.com/api/proposals?status=sent&limit=10 \
+  -H "Authorization: Bearer YOUR_TOKEN"
+```
+</RequestExample>
+
+<ResponseExample>
+```json
+{
+  "proposals": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "client_company": "Acme Corp",
+      "client_email": "client@acme.com",
+      "client_name": "John Doe",
+      "status": "sent",
+      "created_at": "2024-01-15T10:00:00Z",
+      "updated_at": "2024-01-15T10:30:00Z",
+      "template": {
+        "name": "AI-Powered Wellbeing Solutions",
+        "description": "Comprehensive mental health tools"
+      },
+      "_count": {
+        "comments": 5,
+        "analytics": 12
+      }
+    }
+  ],
+  "pagination": {
+    "limit": 10,
+    "offset": 0,
+    "total": 42
+  }
+}
+```
+</ResponseExample>

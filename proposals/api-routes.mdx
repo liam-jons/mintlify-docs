@@ -1,0 +1,206 @@
+---
+title: 'API Routes Overview'
+description: 'Overview of all API routes in the proposal system'
+---
+
+## API Structure
+
+All API routes follow RESTful conventions and are located under `/api/proposals/`. Authentication is required for all endpoints.
+
+## Base URL
+
+```
+Development: http://localhost:3000/api
+Production: https://aisolutionhub.co.uk/api
+```
+
+## Authentication
+
+All requests require a valid Supabase auth token:
+
+```bash
+Authorization: Bearer YOUR_SUPABASE_AUTH_TOKEN
+```
+
+## Response Format
+
+### Success Response
+```json
+{
+  "data": { ... },
+  "meta": {
+    "total": 100,
+    "page": 1,
+    "limit": 20
+  }
+}
+```
+
+### Error Response
+```json
+{
+  "error": "Error message",
+  "details": {
+    "field": ["validation error"]
+  }
+}
+```
+
+## Core Endpoints
+
+### Proposals
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/proposals` | List all proposals |
+| POST | `/proposals` | Create new proposal |
+| GET | `/proposals/:id` | Get specific proposal |
+| PUT | `/proposals/:id` | Update proposal |
+| DELETE | `/proposals/:id` | Delete proposal |
+| PATCH | `/proposals` | Bulk update proposals |
+
+### Proposal Sending
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/proposals/:id/send` | Send proposal via email |
+| GET | `/proposals/:id/send` | Get send history |
+
+### Comments (Coming Soon)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/proposals/:id/comments` | List comments |
+| POST | `/proposals/:id/comments` | Add comment |
+| PUT | `/proposals/:id/comments/:commentId` | Update comment |
+| DELETE | `/proposals/:id/comments/:commentId` | Delete comment |
+
+### Templates (Coming Soon)
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/templates` | List templates |
+| POST | `/templates` | Create template |
+| GET | `/templates/:id` | Get template |
+| PUT | `/templates/:id` | Update template |
+| DELETE | `/templates/:id` | Delete template |
+
+## Request Examples
+
+### Create Proposal
+```bash
+POST /api/proposals
+Content-Type: application/json
+
+{
+  "templateId": "550e8400-e29b-41d4-a716-446655440000",
+  "clientCompany": "Acme Corp",
+  "clientEmail": "client@acme.com",
+  "clientName": "John Doe",
+  "customizations": {
+    "pricing": {
+      "discount": 10
+    }
+  }
+}
+```
+
+### Update Proposal
+```bash
+PUT /api/proposals/550e8400-e29b-41d4-a716-446655440001
+Content-Type: application/json
+
+{
+  "status": "sent",
+  "customizations": {
+    "sections": {
+      "tools": [...]
+    }
+  }
+}
+```
+
+### Send Proposal
+```bash
+POST /api/proposals/550e8400-e29b-41d4-a716-446655440001/send
+Content-Type: application/json
+
+{
+  "recipientEmail": "override@example.com",
+  "personalMessage": "Looking forward to working with you!",
+  "expiryDays": 14
+}
+```
+
+## Query Parameters
+
+### Pagination
+```
+GET /api/proposals?limit=20&offset=0
+```
+
+### Filtering
+```
+GET /api/proposals?status=sent&created_after=2024-01-01
+```
+
+### Sorting
+```
+GET /api/proposals?sort=created_at&order=desc
+```
+
+## Rate Limiting
+
+API endpoints are rate limited to prevent abuse:
+
+- **Authenticated requests**: 100 requests per minute
+- **Proposal sending**: 10 requests per hour
+- **Bulk operations**: 20 requests per hour
+
+## Error Codes
+
+| Status Code | Description |
+|-------------|-------------|
+| 200 | Success |
+| 201 | Created |
+| 400 | Bad Request - Invalid input |
+| 401 | Unauthorized - Missing or invalid token |
+| 403 | Forbidden - Insufficient permissions |
+| 404 | Not Found - Resource doesn't exist |
+| 429 | Too Many Requests - Rate limited |
+| 500 | Internal Server Error |
+
+## Webhooks (Coming Soon)
+
+Configure webhooks to receive real-time updates:
+
+```json
+POST /api/webhooks
+{
+  "url": "https://your-app.com/webhook",
+  "events": ["proposal.viewed", "proposal.accepted"],
+  "secret": "your-webhook-secret"
+}
+```
+
+## SDK Usage (Coming Soon)
+
+```typescript
+import { ProposalClient } from '@aisolutionhub/proposals-sdk';
+
+const client = new ProposalClient({
+  apiKey: 'your-api-key',
+  baseUrl: 'https://aisolutionhub.co.uk/api'
+});
+
+// Create proposal
+const proposal = await client.proposals.create({
+  clientCompany: 'Acme Corp',
+  clientEmail: 'client@acme.com'
+});
+
+// Send proposal
+await client.proposals.send(proposal.id, {
+  personalMessage: 'Looking forward to working together!'
+});
+```
